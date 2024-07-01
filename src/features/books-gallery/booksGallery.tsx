@@ -2,13 +2,14 @@ import React from 'react';
 import Photo from 'assets/photo_2023-11-24_20-13-22.jpg'
 import {BookItem} from "features/books-gallery/book-item";
 import s from '../books-gallery/books.module.css'
+import {categoriesString} from "App";
 
 export type Book = {
     id: string;
     authors: string;
     name: string;
     photo: string;
-    category: string;
+    category: categoriesString;
 };
 const booksArr: Book[] = [
     {
@@ -54,10 +55,18 @@ const booksArr: Book[] = [
         authors: 'ftbhth hsthrt'
     },
 ]
+type BooksGalleryProps = {
+    category: categoriesString;
+};
+
+export const BooksGallery = ({ category }:BooksGalleryProps ) => {
+
+    const filteredBooks = category === 'all'
+        ? booksArr
+        : booksArr.filter(book => category === book.category);
 
 
-export const BooksGallery = () => {
-    const books = booksArr.map((book) => (
+    const books = filteredBooks.map((book) => (
         <BookItem
             key={book.id}
             id={book.id}
@@ -70,8 +79,8 @@ export const BooksGallery = () => {
 
     return (
         <div className={s.container}>
-            <h3>Found 123 books </h3>
-            <div className={s.booksGallery}>
+            <h3>Found {filteredBooks.length} {filteredBooks.length<2 ? 'book': 'books'} </h3>
+            <div className={s.booksGallery} >
                 {books}
             </div>
         </div>
