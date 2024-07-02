@@ -1,26 +1,19 @@
 import React, {useState} from 'react';
 import './App.css';
-import {BooksGallery} from "features/books-gallery/booksGallery";
-import {Header} from "features/header/header";
-import {Categories} from "features/header/settings/sortAndFilter";
+import {BookPage} from "features/bookPage/bookPage";
+import {Main} from "features/main/main";
+import {Route, Routes} from "react-router-dom";
 
 export type categoriesString = 'all' | 'art' | 'biography' | 'computers' | 'history' | 'medical' | 'poetry'
 
 
-
 function App() {
-    const [category, setCategory] = useState<categoriesString>('all');
-    const CategoryChangeHandler = (event: React.ChangeEvent<{}>, newValue:  Categories | null) => {
-        if (newValue) {
-            setCategory(newValue.label);
-        }
-    };
-
-    return (
+        return (
         <div className="App">
-            <Header category={category} categoryChangeHandler={CategoryChangeHandler} />
-            <BooksGallery category={category} />
-            {/*<BookPage />*/}
+            <Routes>
+                <Route path="/" element={<Main/>}/>
+                <Route path="/book/:id" element={<BookPage/>}/>
+            </Routes>
         </div>
     );
 }

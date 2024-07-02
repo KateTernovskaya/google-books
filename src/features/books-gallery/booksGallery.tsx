@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Photo from 'assets/photo_2023-11-24_20-13-22.jpg'
 import {BookItem} from "features/books-gallery/book-item";
 import s from '../books-gallery/books.module.css'
 import {categoriesString} from "App";
+import {instance} from "api/common.api";
+import axios from "axios";
 
-export type Book = {
-    id: string;
-    authors: string;
-    name: string;
-    photo: string;
-    category: categoriesString;
-};
-const booksArr: Book[] = [
+// export type Book = {
+//     id: string;
+//     authors: string;
+//     name: string;
+//     photo: string;
+//     category: categoriesString;
+// };
+const booksArr: any[] = [
     {
         id: '1',
         photo: Photo,
@@ -57,31 +59,51 @@ const booksArr: Book[] = [
 ]
 type BooksGalleryProps = {
     category: categoriesString;
+    books: any
+    getBooks: any
 };
 
-export const BooksGallery = ({ category }:BooksGalleryProps ) => {
 
-    const filteredBooks = category === 'all'
-        ? booksArr
-        : booksArr.filter(book => category === book.category);
+export const BooksGallery = ({category, books, getBooks}: BooksGalleryProps) => {
 
 
-    const books = filteredBooks.map((book) => (
+    useEffect(() => {
+        getBooks()
+    })
+
+
+    // const filteredBooks = category === 'all'
+    //     ? booksArr
+    //     : booksArr.filter(book => category === book.category);
+
+
+    // const books = filteredBooks.map((book) => (
+    //     <BookItem
+    //         key={book.id}
+    //         id={book.id}
+    //         authors={book.authors}
+    //         name={book.name}
+    //         photo={book.photo}
+    //         category={book.category}
+    //     />
+    // ))
+    const booksMap = books.map((book: any) => (
         <BookItem
             key={book.id}
             id={book.id}
-            authors={book.authors}
-            name={book.name}
-            photo={book.photo}
-            category={book.category}
+            authors={book.volumeInfo.authors}
+            title={book.volumeInfo.title}
+            photo={book.volumeInfo.imageLinks.smallThumbnail}
+            category={book.volumeInfo.categories}
         />
     ))
 
+
     return (
         <div className={s.container}>
-            <h3>Found {filteredBooks.length} {filteredBooks.length<2 ? 'book': 'books'} </h3>
-            <div className={s.booksGallery} >
-                {books}
+            {/*<h3>Found {filteredBooks.length} {filteredBooks.length<2 ? 'book': 'books'} </h3>*/}
+            <div className={s.booksGallery}>
+                {booksMap}
             </div>
         </div>
     );

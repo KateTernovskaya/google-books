@@ -1,18 +1,17 @@
 import React from 'react';
 import {Paper} from "@mui/material";
 import s from 'features/books-gallery/books.module.css'
-import {Book} from "features/books-gallery/booksGallery";
 
-export const BookItem = ({id, authors, photo, name, category}: Book) => {
+export const BookItem = (props: any) => {
     return (
-        <Paper elevation={3} className={s.card} id={id} sx={{backgroundColor: 'rgba(137, 164, 208, 0.2)'}}>
+        <Paper className={s.card} id={props.id} sx={{backgroundColor: 'rgba(137, 164, 208, 0.2)'}}>
             <div className={s.cardImg}>
-                <img src={photo}/>
+                <img src={props.photo }/>
             </div>
             <div className={s.info}>
-                <span className={s.name}>{name}</span>
-                <span className={s.author}>{authors}</span>
-                <span className={s.category}>{category}</span>
+                <span className={s.name}>{props.title}</span>
+                <span className={s.author}>{props.authors}</span>
+                <span className={s.category}>{props.category}</span>
             </div>
         </Paper>
     );
