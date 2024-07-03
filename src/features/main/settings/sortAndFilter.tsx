@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import s from 'features/main/main.module.css'
 import {categoriesString} from "App";
 import {
@@ -22,30 +22,18 @@ const categories: Categories[] = [
     {label: 'poetry'}
 ]
 
-const sortingBy: SortArr[] = [
-    {id: '1', label: 'rt'},
-    {id: '2', label: '5t'},
-    {id: '3', label: 'hyt'},
-]
-
 
 export type Categories = {
     label: categoriesString
 }
-
-export type  SortArr = {
-    label: string
-    id?: string
-}
-
+// const sortArr =[{value: 1, title: 'relevance'}, {value: 1, title: 'newest'}]
 
 export const SortAndFilter = (props: any) => {
     const defaultCategory = categories.find(option => option.label === props.category) || null;
-    const [sort, setSort] = React.useState('');
 
-    const sortChangeHandler = (event: SelectChangeEvent) => {
-        setSort(event.target.value as string);
-    }
+
+
+
     return (
         <div className={s.setting}>
             <Autocomplete
@@ -58,25 +46,22 @@ export const SortAndFilter = (props: any) => {
                 options={categories}
                 renderInput={(params) => <TextField {...params} variant="standard" label="Categories"/>}
             />
-            <Box className={s.filter}>
-                <FormControl fullWidth variant="standard">
-                    <InputLabel id="demo-simple-select-label">Sorting by</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={sort}
-                        label="Sorting by"
-                        onChange={sortChangeHandler}
-                    >
-                        {sortingBy.map(sort => {
-                            return (
-                                <MenuItem key={sort.id} value={sort.id}>{sort.label}</MenuItem>
-                            )
-                        })}
 
-                    </Select>
-                </FormControl>
-            </Box>
+            <Autocomplete
+                defaultValue={props.sortBy}
+                value={props.sortBy}
+                clearIcon={null}
+                onChange={props.sortChangeHandler}
+                className={s.filter}
+                disablePortal
+                id="combo-box-demo"
+                options={['relevance', 'newest']}
+                renderInput={(params) => <TextField {...params} variant="standard" label="Categories"/>}
+            />
+
+
+
+
         </div>
     )
 }
