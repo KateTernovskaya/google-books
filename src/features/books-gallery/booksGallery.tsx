@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Photo from 'assets/photo_2023-11-24_20-13-22.jpg'
 import {BookItem} from "features/books-gallery/book-item";
 import s from '../books-gallery/books.module.css'
 import {categoriesString} from "App";
-import {instance} from "api/common.api";
-import axios from "axios";
+import {Button} from "@mui/material";
+import {GoTopBtn} from "components/goToTop";
 
 // export type Book = {
 //     id: string;
@@ -60,16 +60,20 @@ const booksArr: any[] = [
 type BooksGalleryProps = {
     category: categoriesString;
     books: any
-    getBooks: any
+    totalCount: any
+    searchInput: any
+    loadMore30: ()=> void
 };
 
 
-export const BooksGallery = ({category, books, getBooks}: BooksGalleryProps) => {
 
-
-    useEffect(() => {
-        getBooks()
-    })
+export const BooksGallery = ({
+                                 category,
+                                 books,
+                                 searchInput,
+                                 totalCount,
+                                 loadMore30
+                             }: BooksGalleryProps) => {
 
 
     // const filteredBooks = category === 'all'
@@ -91,10 +95,10 @@ export const BooksGallery = ({category, books, getBooks}: BooksGalleryProps) => 
         <BookItem
             key={book.id}
             id={book.id}
-            authors={book.volumeInfo.authors}
-            title={book.volumeInfo.title}
-            photo={book.volumeInfo.imageLinks.smallThumbnail}
-            category={book.volumeInfo.categories}
+            authors={book.volumeInfo.authors ? book.volumeInfo.authors : ''}
+            title={book.volumeInfo.title ? book.volumeInfo.title : ''}
+            photo={book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.smallThumbnail : Photo}
+            category={book.volumeInfo.categories ? book.volumeInfo.categories[0] : ''}
         />
     ))
 
@@ -102,8 +106,14 @@ export const BooksGallery = ({category, books, getBooks}: BooksGalleryProps) => 
     return (
         <div className={s.container}>
             {/*<h3>Found {filteredBooks.length} {filteredBooks.length<2 ? 'book': 'books'} </h3>*/}
+            <h3>Found {totalCount} {books.length < 2 ? 'book' : 'books'} </h3>
             <div className={s.booksGallery}>
                 {booksMap}
+            </div>
+            <div className={s.buttons}>
+                <Button variant="contained" onClick={loadMore30}>Load
+                    more</Button>
+                <GoTopBtn/>
             </div>
         </div>
     );

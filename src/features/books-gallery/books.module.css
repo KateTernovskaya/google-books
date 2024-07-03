@@ -55,3 +55,11 @@ font-size: 18px;
     color: grey;
     text-decoration: underline;
 }
+
+
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}

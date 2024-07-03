@@ -11,11 +11,15 @@ import s from 'features/main/main.module.css'
 // };
 
 export const Header = (props: any) => {
+
     return (
         <div className={s.header}>
             <h1>Search books</h1>
-            <Search searchInput={props.searchInput}
-                    searchChangeHandler={props.searchChangeHandler}/>
+            <Search
+                getBooks={props.getBooks}
+                searchInput={props.searchInput}
+                    searchChangeHandler={props.searchChangeHandler}
+            />
             <SortAndFilter
                 category={props.category}
                 categoryChangeHandler={props.categoryChangeHandler}

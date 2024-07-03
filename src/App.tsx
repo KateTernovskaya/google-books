@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.css';
 import {BookPage} from "features/bookPage/bookPage";
 import {Main} from "features/main/main";
@@ -8,7 +8,7 @@ export type categoriesString = 'all' | 'art' | 'biography' | 'computers' | 'hist
 
 
 function App() {
-        return (
+    return (
         <div className="App">
             <Routes>
                 <Route path="/" element={<Main/>}/>
