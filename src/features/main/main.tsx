@@ -1,28 +1,24 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {categoriesString} from "App";
-import {Categories} from "features/main/settings/sortAndFilter";
 import axios from "axios";
 import {Header} from "features/main/header/header";
 import {BooksGallery} from "features/books-gallery/booksGallery";
-import {BookPage} from "features/bookPage/bookPage";
-import {SelectChangeEvent} from "@mui/material";
+import {categoriesString} from "features/main/settings/sortAndFilter";
 
 
-const initState: any[] = []
+const predefinedCategories: categoriesString[] = ['all', 'art', 'biography', 'computers', 'history', 'medical', 'poetry'];
 
 export const Main = () => {
-    const [category, setCategory] = useState<categoriesString>('all');
     const [books, setBooks] = useState<any[]>([])
     const [searchInput, setSearchInput] = useState('')
-    // const [totalCount, setTotalCount] = useState('What book you want search?')
     const [totalCount, setTotalCount] = useState(0)
     const [maxResult, setMaxResult] = useState(30)
     const [sortBy, setSortBy] = useState('relevance')
+    const [category, setCategory] = useState<categoriesString>('all');
+    const [categories, setCategories] = useState<categoriesString[]>(predefinedCategories);
 
-
-    const categoryChangeHandler = (event: ChangeEvent<{}>, newValue: Categories | null) => {
+    const categoryChangeHandler = (event: ChangeEvent<{}>, newValue: any) => {
         if (newValue) {
-            setCategory(newValue.label);
+            setCategory(newValue);
             console.log(newValue)
             console.log(category)
         }
@@ -34,29 +30,51 @@ export const Main = () => {
         }
     };
 
-    useEffect(() => {
-        if (searchInput) {
-            getBooks();
-        }
-    }, [sortBy]);
-
-
-
     const searchChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value) {
             setSearchInput(e.target.value)
         }
-
     }
+
+    useEffect(() => {
+        if (searchInput) {
+            getBooks();
+        }
+    }, [sortBy, category]);
 
     const loadMore30 = () => {
-        setMaxResult(maxResult + 30)
-        getBooks()
+        // setMaxResult(prevMaxResult => prevMaxResult + 30);
+        // getBooks();
+        console.log('show more')
     }
 
+    const extractCategories = (books: any[]): categoriesString[] => {
+        const categoriesSet = new Set<categoriesString>();
+
+        books.forEach(book => {
+            if (book.volumeInfo.categories) {
+                book.volumeInfo.categories.forEach((cat: string) => {
+                    const lowerCaseCat = cat.toLowerCase() as categoriesString;
+                    if (predefinedCategories.includes(lowerCaseCat)) {
+                        categoriesSet.add(lowerCaseCat);
+                    }
+                });
+            }
+        });
+        // predefinedCategories.forEach(cat => {
+        //     if (!categoriesSet.has(cat)) {
+        //         categoriesSet.add(cat);
+        //     }
+        // });
+
+        console.log(categoriesSet)
+
+        return ['all', ...Array.from(categoriesSet)] as categoriesString[];
+    };
+
     const getBooks = () => {
-        const baseUrl = 'https://www.googleapis.com/books/v1/volumes?q='
-        const apiKey = 'AIzaSyA0WriFxUzA8dGSrLoqmkWgscAhqBZKwb8'
+        const baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
+        const apiKey = 'AIzaSyA0WriFxUzA8dGSrLoqmkWgscAhqBZKwb8';
 
         axios.get(`${baseUrl}${searchInput}&maxResults=${maxResult}&orderBy=${sortBy}&key=${apiKey}`)
             .then(res => {
@@ -67,13 +85,15 @@ export const Main = () => {
                 );
                 setBooks(uniqueBooks);
                 setTotalCount(res.data.totalItems);
+
+                const newCategories = extractCategories(uniqueBooks);
+                console.log('Extracted Categories:', newCategories); // Добавляем лог
+                setCategories(newCategories);
+
                 console.log(res);
-                // setBooks(res.data.items)
-                // setTotalCount(res.data.totalItems)
-                // console.log(res)
             })
-            .catch(err => console.log(err.response.data.error.message))
-    }
+            .catch(err => console.log(err.response.data.error.message));
+    };
 
 
     return (
@@ -86,6 +106,7 @@ export const Main = () => {
                 categoryChangeHandler={categoryChangeHandler}
                 searchInput={searchInput}
                 searchChangeHandler={searchChangeHandler}
+                categories={categories} // Передаем категории в Header
             />
             {/*<BookPage/>*/}
             <BooksGallery

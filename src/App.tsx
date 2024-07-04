@@ -4,8 +4,6 @@ import {BookPage} from "features/bookPage/bookPage";
 import {Main} from "features/main/main";
 import {Route, Routes} from "react-router-dom";
 
-export type categoriesString = 'all' | 'art' | 'biography' | 'computers' | 'history' | 'medical' | 'poetry'
-
 
 function App() {
     return (

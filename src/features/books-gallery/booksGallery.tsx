@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import Photo from 'assets/photo_2023-11-24_20-13-22.jpg'
 import {BookItem} from "features/books-gallery/book-item";
 import s from '../books-gallery/books.module.css'
-import {categoriesString} from "App";
 import {Button} from "@mui/material";
 import {GoTopBtn} from "components/goToTop";
 
@@ -13,59 +12,26 @@ import {GoTopBtn} from "components/goToTop";
 //     photo: string;
 //     category: categoriesString;
 // };
-const booksArr: any[] = [
-    {
-        id: '1',
-        photo: Photo,
-        category: 'art',
-        name: 'Две короны',
-        authors: 'Наталья Жильцова'
-    },
-    {
-        id: '2',
-        photo: Photo,
-        category: 'biography',
-        name: 'Две короны. Турнир',
-        authors: 'Наталья Жильцова'
-    },
-    {
-        id: '3',
-        photo: Photo,
-        category: 'computers',
-        name: 'Две короны',
-        authors: 'Светлана Ушакова'
-    },
-    {
-        id: '4',
-        photo: Photo,
-        category: 'history',
-        name: 'Две короны. Турнир;',
-        authors: 'Светлана Ушакова'
-    },
-    {
-        id: '5',
-        photo: Photo,
-        category: 'medical',
-        name: 't6jkl;',
-        authors: 'ftbhth hsthrt'
-    },
-    {
-        id: '6',
-        photo: Photo,
-        category: 'poetry',
-        name: 't6jkl;',
-        authors: 'ftbhth hsthrt'
-    },
-]
+
 type BooksGalleryProps = {
-    category: categoriesString;
+    category: any;
     books: any
     totalCount: any
     searchInput: any
     loadMore30: ()=> void
 };
 
-
+type Book = {
+    id: string;
+    volumeInfo: {
+        authors?: string[];
+        title?: string;
+        imageLinks?: {
+            smallThumbnail: string;
+        };
+        categories?: string[];
+    };
+};
 
 export const BooksGallery = ({
                                  category,
@@ -80,6 +46,9 @@ export const BooksGallery = ({
     //     ? booksArr
     //     : booksArr.filter(book => category === book.category);
 
+    const filteredBooks = category === 'all'
+        ? books
+        : books.filter((book: Book) => book.volumeInfo.categories === category);
 
     // const books = filteredBooks.map((book) => (
     //     <BookItem
@@ -91,8 +60,9 @@ export const BooksGallery = ({
     //         category={book.category}
     //     />
     // ))
-    const booksMap = books.map((book: any) => (
+    const booksMap = filteredBooks.map((book: any) => (
         <BookItem
+            item={book}
             key={book.id}
             id={book.id}
             authors={book.volumeInfo.authors ? book.volumeInfo.authors : ''}
