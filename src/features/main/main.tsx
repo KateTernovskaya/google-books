@@ -12,6 +12,7 @@ export const Main = () => {
     const [searchInput, setSearchInput] = useState('')
     const [totalCount, setTotalCount] = useState(0)
     const [maxResult, setMaxResult] = useState(30)
+    const [startIndex , setStartIndex ] = useState(0)
     const [sortBy, setSortBy] = useState('relevance')
     const [category, setCategory] = useState<categoriesString>('all');
     const [categories, setCategories] = useState<categoriesString[]>(predefinedCategories);
@@ -40,11 +41,10 @@ export const Main = () => {
         if (searchInput) {
             getBooks();
         }
-    }, [sortBy, category]);
+    }, [sortBy, category, startIndex]);
 
     const loadMore30 = () => {
-        // setMaxResult(prevMaxResult => prevMaxResult + 30);
-        // getBooks();
+        setStartIndex(prevIndex => prevIndex + maxResult);
         console.log('show more')
     }
 
@@ -76,18 +76,18 @@ export const Main = () => {
         const baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
         const apiKey = 'AIzaSyA0WriFxUzA8dGSrLoqmkWgscAhqBZKwb8';
 
-        axios.get(`${baseUrl}${searchInput}&maxResults=${maxResult}&orderBy=${sortBy}&key=${apiKey}`)
+        axios.get(`${baseUrl}${searchInput}&startIndex=${startIndex}&maxResults=${maxResult}&subject=${category}&orderBy=${sortBy}&key=${apiKey}`)
             .then(res => {
                 const uniqueBooks = res.data.items.filter((book: any, index: number, self: any[]) =>
                         index === self.findIndex((t) => (
                             t.id === book.id
                         ))
                 );
-                setBooks(uniqueBooks);
+                setBooks(prevBooks => startIndex === 0 ? uniqueBooks : [...prevBooks, ...uniqueBooks]);
                 setTotalCount(res.data.totalItems);
 
-                const newCategories = extractCategories(uniqueBooks);
-                console.log('Extracted Categories:', newCategories); // Добавляем лог
+                const newCategories = extractCategories([...books, ...uniqueBooks]);
+                console.log('Extracted Categories:', newCategories);
                 setCategories(newCategories);
 
                 console.log(res);

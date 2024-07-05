@@ -12,13 +12,13 @@ export const BookPage = () =>  {
     const navigate = useNavigate()
 
     const handleBackClick = () => {
-        navigate(-1)
-    };
+        navigate("/");
+    }
 
-    useEffect(() => {
+        useEffect(() => {
         const fetchBook = async () => {
             try {
-                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/${id}`);
+                const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyA0WriFxUzA8dGSrLoqmkWgscAhqBZKwb8`);
                 setBook(response.data);
             } catch (error) {
                 console.error("Error fetching book details:", error);
