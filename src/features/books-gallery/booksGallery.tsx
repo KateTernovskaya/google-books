@@ -3,24 +3,12 @@ import { BookItem } from "features/books-gallery/book-item";
 import s from "../books-gallery/books.module.css";
 import { Button } from "@mui/material";
 import { GoTopBtn } from "components/goToTop";
+import { Book } from "components/types";
 
 type BooksGalleryProps = {
-  books: any;
-  totalCount: any;
+  books: Book[];
+  totalCount: number;
   loadMore30: () => void;
-};
-
-export type Book = {
-  id: string;
-  volumeInfo: {
-    authors?: string[];
-    title?: string;
-    imageLinks?: {
-      smallThumbnail: string;
-    };
-    description?: string;
-    categories?: string[];
-  };
 };
 
 export const BooksGallery = ({ books, totalCount, loadMore30 }: BooksGalleryProps) => {

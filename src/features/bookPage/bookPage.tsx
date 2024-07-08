@@ -3,8 +3,8 @@ import Photo from "../../assets/photo_2023-11-24_20-13-22.jpg";
 import s from "./bookPage.module.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "@mui/material";
 import { apiKey, baseUrl } from "api/common.api";
+import { SuperButton } from "components/buttons/superButton";
 
 export const BookPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,9 +30,8 @@ export const BookPage = () => {
 
   return (
     <div className={s.bookPage}>
-      <Button variant="contained" onClick={handleBackClick}>
-        Back
-      </Button>
+      <SuperButton title="Back" onClick={handleBackClick} />
+
       <div className={s.bookImg}>
         <img
           src={book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.smallThumbnail : Photo}
