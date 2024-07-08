@@ -1,5 +1,4 @@
 import { ChangeEvent, SyntheticEvent } from "react";
-import { AutocompleteChangeReason } from "@mui/material";
 
 export type Book = {
   id: string;
@@ -18,13 +17,15 @@ export type categoriesString = "All" | "Art" | "Biography" | "Computers" | "Hist
 export type sortByString = "relevance" | "newest";
 
 export type HeaderProps = {
-  sortBy: string;
-  sortChange: (event: SyntheticEvent<Element, Event>, value: string | null) => void;
+  sortBy: sortByString;
+  sortChange: (event: SyntheticEvent<Element, Event>, value: sortByString | null) => void;
   getBooks: () => void;
-  category: string;
-  categoryChange: (event: SyntheticEvent<Element, Event>, value: string | null) => void;
+  category: categoriesString;
+  categoryChange: (event: SyntheticEvent<Element, Event>, value: categoriesString | null) => void;
   searchChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  error: string | null;
+  setError: (error: string | null) => void;
 };
 
 export type SearchProps = Omit<HeaderProps, "sortBy" | "sortChange" | "category" | "categoryChange">;
-export type SortProps = Omit<HeaderProps, "getBooks" | "searchChange">;
+export type SortProps = Omit<HeaderProps, "getBooks" | "searchChange" | "error" | "setError">;

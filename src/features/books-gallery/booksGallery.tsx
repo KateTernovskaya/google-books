@@ -2,7 +2,7 @@ import React from "react";
 import { BookItem } from "features/books-gallery/book-item";
 import s from "../books-gallery/books.module.css";
 import { Button } from "@mui/material";
-import { GoTopBtn } from "components/goToTop";
+import { GoTopBtn } from "components/buttons/goToTop";
 import { Book } from "components/types";
 
 type BooksGalleryProps = {

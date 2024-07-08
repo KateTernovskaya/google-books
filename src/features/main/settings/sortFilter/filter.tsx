@@ -2,15 +2,16 @@ import React, { SyntheticEvent } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import s from "features/main/main.module.css";
 
-type Props = {
-  value: string;
+type Props<T> = {
   label: string;
-  onChange: (event: SyntheticEvent<Element, Event>, value: string | null) => void;
-  options: any[];
+  value: T;
+  onChange: (event: SyntheticEvent<Element, Event>, value: T | null) => void;
+  options: T[];
 };
-export const Filter = ({ options, value, label, onChange }: Props) => {
+
+export const Filter = <T extends string>({ label, value, onChange, options }: Props<T>) => {
   return (
-    <Autocomplete
+    <Autocomplete<T>
       value={value}
       onChange={onChange}
       className={s.filter}

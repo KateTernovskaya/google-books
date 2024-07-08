@@ -5,10 +5,12 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiKey, baseUrl } from "api/common.api";
 import { SuperButton } from "components/buttons/superButton";
+import { Book } from "components/types";
+import { ProgressLinear } from "components/progress/progressLinear";
 
 export const BookPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [book, setBook] = useState<any>(null);
+  const [book, setBook] = useState<Book | null>(null);
 
   const navigate = useNavigate();
   const handleBackClick = () => navigate("/");
@@ -25,7 +27,7 @@ export const BookPage = () => {
   }, [id]);
 
   if (!book) {
-    return <div>Loading...</div>;
+    return <ProgressLinear />;
   }
 
   return (
@@ -42,7 +44,7 @@ export const BookPage = () => {
         <span className={s.category}>{book.volumeInfo.categories}</span>
         <span className={s.name}>{book.volumeInfo.title}</span>
         <span className={s.authors}>{book.volumeInfo.authors?.join(", ")}</span>
-        <p className={s.description} dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }}></p>
+        <p className={s.description} dangerouslySetInnerHTML={{ __html: book.volumeInfo.description ?? "" }}></p>
       </div>
     </div>
   );
