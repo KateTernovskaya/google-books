@@ -1,37 +1,36 @@
 .header {
-    background-color: rgba(137, 164, 208, 0.7);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 50px 20px;
+  background-color: rgba(137, 164, 208, 0.7);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 50px 20px;
 }
 
 h1 {
-    padding-bottom: 30px;
+  padding-bottom: 30px;
 }
 
 .search {
-    display: flex;
-    align-items: center;
-    padding: 4px 10px;
-    width: 800px;
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  width: 800px;
 }
 
 .setting {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-top: 30px;
 }
 
 .filter {
-    padding: 4px 10px;
-    border-radius: 5px;
-    width: 300px;
-    background-color: white;
+  padding: 4px 10px;
+  border-radius: 5px;
+  width: 300px;
+  background-color: white;
 }
 
-
 .none {
-    display: none;
+  display: none;
 }

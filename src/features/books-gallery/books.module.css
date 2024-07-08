@@ -1,65 +1,64 @@
 .container {
-    max-width: 1200px;
-    width: 100%;
-    margin: 50px auto;
+  max-width: 1200px;
+  width: 100%;
+  margin: 50px auto;
 }
 
 h3 {
-    text-align: center;
-    font-size: 25px;
-    letter-spacing: 2px;
+  text-align: center;
+  font-size: 25px;
+  letter-spacing: 2px;
 }
 
 .booksGallery {
-    margin: 40px auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  margin: 40px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .card {
-    background-color: rgba(137, 164, 208, 0.2);
-    max-width: 20%;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    padding: 15px;
-    cursor: pointer;
+  background-color: rgba(137, 164, 208, 0.2);
+  max-width: 20%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  padding: 15px;
+  cursor: pointer;
 }
 
 .cardImg img {
-    width: 100%;
-   height: 280px;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .info {
-    display: flex;
-    align-items: start;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .name {
-    margin-top: 10px;
-font-size: 18px;
-    font-weight: 700;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .author {
 }
 
 .category {
-    color: grey;
-    text-decoration: underline;
+  color: grey;
+  text-decoration: underline;
 }
 
-
-.buttons{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
