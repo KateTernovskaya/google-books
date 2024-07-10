@@ -2,7 +2,7 @@ import React from "react";
 import { Search } from "features/main/settings/search";
 import { SortAndFilter } from "features/main/settings/sortFilter/sortAndFilter";
 import s from "features/main/main.module.css";
-import { HeaderProps } from "components/types";
+import { HeaderProps } from "state/types";
 
 export const Header = ({
   getBooks,

@@ -1,6 +1,6 @@
 import React from "react";
 import s from "features/main/main.module.css";
-import { categoriesString, sortByString, SortProps } from "components/types";
+import { categoriesString, sortByString, SortProps } from "state/types";
 import { Filter } from "features/main/settings/sortFilter/filter";
 
 const selectCategories: categoriesString[] = ["All", "Art", "Biography", "Computers", "History", "Medical", "Poetry"];

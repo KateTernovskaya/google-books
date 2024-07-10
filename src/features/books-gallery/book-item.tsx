@@ -3,10 +3,10 @@ import { Paper } from "@mui/material";
 import s from "features/books-gallery/books.module.css";
 import { useNavigate } from "react-router-dom";
 import Photo from "../../assets/photo_2023-11-24_20-13-22.jpg";
-import { Book } from "components/types";
+import { BookType } from "state/types";
 
 type Props = {
-  book: Book;
+  book: BookType;
 };
 
 export const BookItem = ({ book }: Props) => {

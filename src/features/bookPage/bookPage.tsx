@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Photo from "../../assets/photo_2023-11-24_20-13-22.jpg";
 import s from "./bookPage.module.css";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { apiKey, baseUrl } from "api/common.api";
+import { BooksApi } from "api/api";
 import { SuperButton } from "components/buttons/superButton";
-import { Book } from "components/types";
+import { BookType } from "state/types";
 import { ProgressLinear } from "components/progress/progressLinear";
+import { AlertError } from "components/alertError";
+import { useSelector } from "react-redux";
+import { RootStateType } from "state/store";
 
 export const BookPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [book, setBook] = useState<Book | null>(null);
-
+  const [book, setBook] = useState<BookType | null>(null);
+  const error = useSelector((state: RootStateType) => state.error);
   const navigate = useNavigate();
   const handleBackClick = () => navigate("/");
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/${id}?key=${apiKey}`)
+    BooksApi.getDetailBook(id)
       .then((res) => {
         setBook(res.data);
       })
@@ -41,6 +42,7 @@ export const BookPage = () => {
         />
       </div>
       <div className={s.bookInfo}>
+        {error && <AlertError title={error} />}
         <span className={s.category}>{book.volumeInfo.categories}</span>
         <span className={s.name}>{book.volumeInfo.title}</span>
         <span className={s.authors}>{book.volumeInfo.authors?.join(", ")}</span>

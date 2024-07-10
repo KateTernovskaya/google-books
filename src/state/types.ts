@@ -1,6 +1,17 @@
 import { ChangeEvent, SyntheticEvent } from "react";
 
-export type Book = {
+export type BooksState = {
+  books: BookType[];
+  searchInput: string;
+  totalCount: number;
+  startIndex: number;
+  sortBy: sortByString;
+  category: categoriesString;
+  loading: boolean;
+  error: string | null;
+};
+
+export type BookType = {
   id: string;
   volumeInfo: {
     authors?: string[];

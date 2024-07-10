@@ -1,81 +1,45 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import axios from "axios";
+import React, { ChangeEvent, SyntheticEvent, useEffect } from "react";
 import { Header } from "features/main/header/header";
 import { BooksGallery } from "features/books-gallery/booksGallery";
-import { apiKey, baseUrl, maxResult } from "api/common.api";
-import { Book, categoriesString, sortByString } from "components/types";
+import { categoriesString, sortByString } from "state/types";
 import { ProgressLinear } from "components/progress/progressLinear";
 import { AlertError } from "components/alertError";
+import { useDispatch, useSelector } from "react-redux";
+import { RootStateType } from "state/store";
+import { clearErrorAC, loadMoreAC, searchBooksAC, setCategoryAC, setSortAC } from "state/actions";
+import { fetchBooks } from "state/thunks";
 
 export const Main = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [startIndex, setStartIndex] = useState<number>(0);
-  const [sortBy, setSortBy] = useState<sortByString>("relevance");
-  const [category, setCategory] = useState<categoriesString>("All");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const { books, searchInput, totalCount, startIndex, sortBy, category, loading, error } = useSelector(
+    (state: RootStateType) => state,
+  );
 
   const categoryChangeHandler = (event: SyntheticEvent<Element, Event>, value: categoriesString | null) => {
     if (value) {
-      setCategory(value);
-      setStartIndex(0);
+      dispatch(setCategoryAC(value));
     }
   };
 
   const sortChangeHandler = (event: SyntheticEvent<Element, Event>, value: sortByString | null) => {
     if (value) {
-      setSortBy(value);
-      setStartIndex(0);
+      dispatch(setSortAC(value));
     }
   };
 
   const searchChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.trim()) {
-      setSearchInput(e.target.value.trim());
-      setStartIndex(0);
+      dispatch(searchBooksAC(e.target.value.trim()));
     }
   };
 
   const loadMore30 = () => {
-    setStartIndex((prevIndex) => prevIndex + maxResult);
-  };
-
-  const getBooks = () => {
-    const query = `?q=${searchInput}`;
-    const page = `&startIndex=${startIndex}`;
-    const maxResults = `&maxResults=${maxResult}`;
-    const orderBy = `&orderBy=${sortBy}`;
-    const key = `&key=${apiKey}`;
-    const categoryFilter = category !== "All" ? `+subject:${category}` : "";
-    setLoading(true);
-
-    axios
-      .get(`${baseUrl}${query}${categoryFilter}${page}${maxResults}${orderBy}${key}`)
-      .then((res) => {
-        const uniqueBooks = res.data.items.filter(
-          (book: Book, index: number, self: any[]) => index === self.findIndex((t) => t.id === book.id),
-        );
-        setBooks((prevBooks) => (startIndex === 0 ? uniqueBooks : [...prevBooks, ...uniqueBooks]));
-        setTotalCount(res.data.totalItems);
-
-        console.log(res);
-      })
-      .catch((err) => {
-        if (searchInput === "") {
-          setError("Title is required");
-        } else {
-          setError(err.response.data.error.message);
-          console.log(err.response.data.error.message);
-        }
-      })
-      .finally(() => setLoading(false));
+    dispatch(loadMoreAC());
   };
 
   useEffect(() => {
     if (searchInput) {
-      getBooks();
+      dispatch(fetchBooks());
     }
   }, [startIndex]);
 
@@ -84,15 +48,15 @@ export const Main = () => {
       <Header
         sortBy={sortBy}
         sortChange={sortChangeHandler}
-        getBooks={getBooks}
+        getBooks={() => dispatch(fetchBooks())}
         category={category}
         categoryChange={categoryChangeHandler}
         searchChange={searchChangeHandler}
         error={error}
-        setError={setError}
+        setError={() => dispatch(clearErrorAC())}
       />
-      {loading ? <ProgressLinear /> : null}
-      {error ? <AlertError title={error} /> : null}
+      {loading && <ProgressLinear />}
+      {error && <AlertError title={error} />}
       <BooksGallery books={books} totalCount={totalCount} loadMore30={loadMore30} />
     </>
   );

@@ -3,16 +3,16 @@ import { BookItem } from "features/books-gallery/book-item";
 import s from "../books-gallery/books.module.css";
 import { Button } from "@mui/material";
 import { GoTopBtn } from "components/buttons/goToTop";
-import { Book } from "components/types";
+import { BookType } from "state/types";
 
 type BooksGalleryProps = {
-  books: Book[];
+  books: BookType[];
   totalCount: number;
   loadMore30: () => void;
 };
 
 export const BooksGallery = ({ books, totalCount, loadMore30 }: BooksGalleryProps) => {
-  const booksMap = books.map((book: Book) => <BookItem key={book.id} book={book} />);
+  const booksMap = books.map((book: BookType) => <BookItem key={book.id} book={book} />);
 
   const loadMore30Btn =
     books.length > 0 ? (
