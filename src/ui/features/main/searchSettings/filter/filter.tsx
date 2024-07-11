@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import { Autocomplete, TextField } from "@mui/material";
-import s from "features/main/main.module.css";
+import s from "ui/features/main/main.module.css";
 
 type Props<T> = {
   label: string;

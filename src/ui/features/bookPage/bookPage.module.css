@@ -1,0 +1,37 @@
+.bookPage {
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
+    background-color: rgba(137, 164, 208, 0.5);
+    padding: 100px 30px 40px;
+    border-radius: 5px;
+}
+
+.bookImg img {
+    border-radius: 5px;
+    max-width: 300px;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.bookInfo {
+    max-width: 600px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.name {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.authors {
+    font-size: 16px;
+    margin-bottom: 30px;
+    font-weight: 700;
+}

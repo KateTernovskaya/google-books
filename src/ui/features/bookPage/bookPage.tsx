@@ -1,40 +1,45 @@
 import React, { useEffect, useState } from "react";
-import Photo from "../../assets/photo_2023-11-24_20-13-22.jpg";
-import s from "./bookPage.module.css";
+import Photo from "ui/assets/imgStub.jpg";
+import s from "ui/features/bookPage/bookPage.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { BooksApi } from "api/api";
-import { SuperButton } from "components/buttons/superButton";
+import { SuperButton } from "ui/components/buttons/superButton";
 import { BookType } from "state/types";
-import { ProgressLinear } from "components/progress/progressLinear";
-import { AlertError } from "components/alertError";
-import { useSelector } from "react-redux";
-import { RootStateType } from "state/store";
+import { loadingAC, setErrorAC } from "state/books/books-actions";
+import { useAppDispatch } from "state/store";
 
 export const BookPage = () => {
   const { id } = useParams<{ id: string }>();
   const [book, setBook] = useState<BookType | null>(null);
-  const error = useSelector((state: RootStateType) => state.error);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleBackClick = () => navigate("/");
 
-  useEffect(() => {
+  const fetchDetailBook = () => {
+    dispatch(loadingAC(true));
+    dispatch(setErrorAC(null));
     BooksApi.getDetailBook(id)
       .then((res) => {
         setBook(res.data);
       })
       .catch((error) => {
+        dispatch(setErrorAC("Error fetching book details"));
         console.error("Error fetching book details:", error);
-      });
+      })
+      .finally(() => dispatch(loadingAC(false)));
+  };
+
+  useEffect(() => {
+    fetchDetailBook();
   }, [id]);
 
   if (!book) {
-    return <ProgressLinear />;
+    return;
   }
 
   return (
     <div className={s.bookPage}>
       <SuperButton title="Back" onClick={handleBackClick} />
-
       <div className={s.bookImg}>
         <img
           src={book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.smallThumbnail : Photo}
@@ -42,7 +47,6 @@ export const BookPage = () => {
         />
       </div>
       <div className={s.bookInfo}>
-        {error && <AlertError title={error} />}
         <span className={s.category}>{book.volumeInfo.categories}</span>
         <span className={s.name}>{book.volumeInfo.title}</span>
         <span className={s.authors}>{book.volumeInfo.authors?.join(", ")}</span>

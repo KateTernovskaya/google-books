@@ -1,13 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { RootStateType } from "state/store";
-import {
-  BooksReducerType,
-  clearBooksAC,
-  finishLoadingAC,
-  getBooksAC,
-  getBooksRequestAC,
-  setErrorAC,
-} from "state/actions";
+import { BooksReducerType, clearBooksAC, getBooksAC, loadingAC, setErrorAC } from "state/books/books-actions";
 import { BooksApi } from "api/api";
 import { BookType } from "state/types";
 
@@ -15,7 +8,7 @@ export const fetchBooks = (): ThunkAction<void, RootStateType, unknown, BooksRed
   const state = getState();
   const { books, searchInput, startIndex, sortBy, category, totalCount } = state;
 
-  dispatch(getBooksRequestAC());
+  dispatch(loadingAC(true));
 
   BooksApi.getBooks(searchInput, startIndex, sortBy, category)
     .then((res) => {
@@ -30,7 +23,7 @@ export const fetchBooks = (): ThunkAction<void, RootStateType, unknown, BooksRed
       }
     })
     .catch((err) => {
-      if (searchInput === "") {
+      if (searchInput.trim() === "") {
         dispatch(setErrorAC("Title is required"));
       } else if (err.response && err.response.data && err.response.data.error && err.response.data.error.message) {
         dispatch(setErrorAC(err.response.data.error.message));
@@ -38,6 +31,5 @@ export const fetchBooks = (): ThunkAction<void, RootStateType, unknown, BooksRed
         dispatch(setErrorAC("An error has occurred. Try entering a different book"));
         dispatch(clearBooksAC(books, totalCount));
       }
-    })
-    .finally(() => dispatch(finishLoadingAC()));
+    });
 };

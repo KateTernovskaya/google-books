@@ -1,8 +1,8 @@
 import React from "react";
 import { Paper } from "@mui/material";
-import s from "features/books-gallery/books.module.css";
+import s from "ui/features/main/books-gallery/books.module.css";
 import { useNavigate } from "react-router-dom";
-import Photo from "../../assets/photo_2023-11-24_20-13-22.jpg";
+import Photo from "ui/assets/imgStub.jpg";
 import { BookType } from "state/types";
 
 type Props = {
@@ -11,7 +11,6 @@ type Props = {
 
 export const BookItem = ({ book }: Props) => {
   const navigate = useNavigate();
-
   const handleCardClick = () => {
     navigate(`/book/${book.id}`);
   };
